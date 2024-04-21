@@ -1,4 +1,6 @@
-import { v4 } from 'uuid';
+import {
+    v4, 
+} from "uuid";
 
 /**
  * @property id 식별자
@@ -8,31 +10,31 @@ import { v4 } from 'uuid';
  * @property lastModifiedTime 마지막 수정 시간
  */
 export class Author {
-  constructor(
+    constructor(
     private _id: string = v4(),
     private _name: string,
     private _countryCode: string,
     private _createdTime: Date,
     private _lastModifiedTime: Date | null = null,
-  ) {}
+    ) {}
 
-  get id(): string {
-    return this._id;
-  }
+    get id(): string {
+        return this._id;
+    }
 
-  get name(): string {
-    return this._name;
-  }
+    get name(): string {
+        return this._name;
+    }
 
-  get countryCode(): string {
-    return this._countryCode;
-  }
+    get countryCode(): string {
+        return this._countryCode;
+    }
 
-  get createdTime(): Date {
-    return this._createdTime;
-  }
+    get createdTime(): Date {
+        return this._createdTime;
+    }
 
-  get lastModifiedTime(): Date {
-    return this._lastModifiedTime;
-  }
+    get lastModifiedTime(): Date {
+        return this._lastModifiedTime;
+    }
 }

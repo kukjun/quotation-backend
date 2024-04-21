@@ -1,4 +1,6 @@
-import { v4 } from 'uuid';
+import {
+    v4, 
+} from "uuid";
 
 /**
  * @property id 식별자
@@ -11,7 +13,7 @@ import { v4 } from 'uuid';
  * @property childCommentIds 댓글의 하위 댓글 목록
  */
 export class Comment {
-  constructor(
+    constructor(
     private id: string = v4(),
     private quotationId: string,
     private userId: string,
@@ -20,5 +22,5 @@ export class Comment {
     private lastModifiedTime: Date = null,
     private parentCommentId: string,
     private childCommentIds: Comment[] = [],
-  ) {}
+    ) {}
 }

@@ -1,4 +1,6 @@
-import { v4 } from 'uuid';
+import {
+    v4, 
+} from "uuid";
 
 /**
  * @property id 식별자
@@ -8,11 +10,11 @@ import { v4 } from 'uuid';
  * @property lastModifiedTime 마지막 수정 시간
  */
 export class Like {
-  constructor(
+    constructor(
     private id: string = v4(),
     private userId: string,
     private quotationId: string,
     private createdTime: Date,
     private lastModifiedTime: Date = null,
-  ) {}
+    ) {}
 }

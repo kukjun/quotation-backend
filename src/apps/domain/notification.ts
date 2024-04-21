@@ -1,4 +1,6 @@
-import { v4 } from 'uuid';
+import {
+    v4, 
+} from "uuid";
 
 /**
  * @property id 식별자
@@ -10,7 +12,7 @@ import { v4 } from 'uuid';
  * @property lastModifiedTime 마지막 수정 시간
  */
 export class Notification {
-  constructor(
+    constructor(
     private id: string = v4(),
     private commenterId: string,
     private commentedUserId: string,
@@ -18,5 +20,5 @@ export class Notification {
     private alarmCheck: boolean,
     private createdTime: Date,
     private lastModifiedTime: Date = null,
-  ) {}
+    ) {}
 }

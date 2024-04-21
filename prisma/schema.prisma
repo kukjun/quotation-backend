@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                           String    @id @default(uuid())
+  password                     String
+  nickname                     String    @unique
+  profilePath                  String?
+  favoriteQuotation            String?
+  favoriteAuthor               String?
+  commentAlarm                 Boolean?
+  quotationAlarm               Boolean?
+  createdTime                  DateTime? @default(now())
+  lastModifiedTime             DateTime? @updatedAt
+  identityVerificationQuestion String?
+  identityVerificationAnswer   String?
+}
+
+model Quotation {
+  id                  String    @id @default(uuid())
+  content             String?
+  likeCount           BigInt?
+  shareCount          BigInt?
+  commentCount        BigInt?
+  backgroundImagePath String?
+  createdTime         DateTime? @default(now())
+  lastModifiedTime    DateTime? @updatedAt
+  authorId            String?   @unique
+  author              Author?   @relation(fields: [authorId], references: [id])
+}
+
+model Author {
+  id               String     @id @default(uuid())
+  name             String?
+  contryCode       String?
+  createdTime      DateTime?  @default(now())
+  lastModifiedTime DateTime?  @updatedAt
+  Quotation        Quotation?
+}

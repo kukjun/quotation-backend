@@ -1,4 +1,6 @@
-import { v4 } from 'uuid';
+import {
+    v4, 
+} from "uuid";
 
 /**
  * @property id 식별자
@@ -12,7 +14,7 @@ import { v4 } from 'uuid';
  * @property lastModifiedTime 마지막 수정 시간
  */
 export class Quotation {
-  constructor(
+    constructor(
     private id: string = v4(),
     private authorId: string,
     private content: string,
@@ -22,5 +24,5 @@ export class Quotation {
     private backgroundImagePath: string,
     private createdTime: Date,
     private lastModifiedTime: Date = null,
-  ) {}
+    ) {}
 }

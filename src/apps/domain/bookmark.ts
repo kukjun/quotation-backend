@@ -1,5 +1,9 @@
-import { v4 } from 'uuid/index';
-import { Quotation } from './quotation';
+import {
+    v4, 
+} from "uuid/index";
+import {
+    Quotation, 
+} from "./quotation";
 
 /**
  * @property id 식별자
@@ -12,7 +16,7 @@ import { Quotation } from './quotation';
  * @property lastModifiedTime 마지막 수정 시간
  */
 export class Bookmark {
-  constructor(
+    constructor(
     private id: string = v4(),
     private name: string,
     private userId: string,
@@ -21,5 +25,5 @@ export class Bookmark {
     private icon: string = null,
     private createdTime: Date,
     private lastModifiedTime: Date = null,
-  ) {}
+    ) {}
 }
