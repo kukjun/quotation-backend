@@ -7,10 +7,14 @@ import {
 import {
     ClassSerializerInterceptor, 
 } from "@nestjs/common";
+import {
+    HttpExceptionFilter, 
+} from "./filter/http-exception.filter";
 // import { AppModule } from './app.module';
 
 async function bootstrap() {
     const app = await NestFactory.create(UserModule);
+    app.useGlobalFilters(new HttpExceptionFilter());
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     await app.listen(3000);
 }
