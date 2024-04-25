@@ -1,6 +1,6 @@
 import {
     PrismaService, 
-} from "../../../../../prisma.service";
+} from "../prisma.service";
 import {
     UserEntity, 
 } from "../entities/user.entity";
