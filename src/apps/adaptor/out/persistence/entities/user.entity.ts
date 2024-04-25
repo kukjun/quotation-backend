@@ -2,13 +2,15 @@ import {
     Account,
 } from "@prisma/client";
 import {
-    User,
-} from "../../../../domain/user";
+    UserDomain,
+} from "../../../../domain/user.domain";
 
 export class UserEntity implements Account {
   id: string;
   password: string;
   nickname: string;
+  identityVerificationQuestion: string | null;
+  identityVerificationAnswer: string | null;
   profilePath: string | null;
   favoriteQuotation: string | null;
   favoriteAuthor: string | null;
@@ -16,13 +18,13 @@ export class UserEntity implements Account {
   quotationAlarm: boolean | null;
   createdTime: Date | null;
   lastModifiedTime: Date | null;
-  identityVerificationQuestion: string | null;
-  identityVerificationAnswer: string | null;
 
   constructor(
       id: string,
       password: string,
       nickname: string,
+      identityVerificationQuestion: string | null,
+      identityVerificationAnswer: string | null,
       profilePath: string | null,
       favoriteQuotation: string | null,
       favoriteAuthor: string | null,
@@ -30,8 +32,6 @@ export class UserEntity implements Account {
       quotationAlarm: boolean | null,
       createdTime: Date | null,
       lastModifiedTime: Date | null,
-      identityVerificationQuestion: string | null,
-      identityVerificationAnswer: string | null,
   ) {
       this.id = id;
       this.password = password;
@@ -48,10 +48,12 @@ export class UserEntity implements Account {
   }
 
   toDomain() {
-      return new User(
+      return new UserDomain(
           this.id,
           this.password,
           this.nickname,
+          this.identityVerificationQuestion,
+          this.identityVerificationAnswer,
           this.profilePath,
           this.favoriteQuotation,
           this.favoriteAuthor,
@@ -59,8 +61,7 @@ export class UserEntity implements Account {
           this.quotationAlarm,
           this.createdTime,
           this.lastModifiedTime,
-          this.identityVerificationQuestion,
-          this.identityVerificationAnswer,
       );
   }
+
 }

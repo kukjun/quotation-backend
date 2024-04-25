@@ -11,7 +11,7 @@ import {
     CreateUserUseCase,
     CreateUserUseCaseSymbol,
     Data,
-} from "../../../../application/port/in/create.user.use.case";
+} from "../../../../application/port/in/create-user.use.case";
 
 @Controller("/users")
 export class UserController {

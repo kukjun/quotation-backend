@@ -2,9 +2,6 @@ import {
     PrismaService, 
 } from "../../../../../prisma.service";
 import {
-    Account, 
-} from "@prisma/client";
-import {
     UserEntity, 
 } from "../entities/user.entity";
 import {
@@ -25,10 +22,44 @@ export class UserRepository {
         if (!account) {
             return null;
         } else {
-            const entity = new UserEntity(
-                account.id, account.password, account.nickname, account.profilePath, account.favoriteQuotation, account.favoriteAuthor, account.commentAlarm, account.quotationAlarm, account.createdTime, account.lastModifiedTime, account.identityVerificationQuestion, account.identityVerificationAnswer,
+            return new UserEntity(
+                account.id,
+                account.password,
+                account.nickname,
+                account.identityVerificationQuestion,
+                account.identityVerificationAnswer,
+                account.profilePath,
+                account.favoriteQuotation,
+                account.favoriteAuthor,
+                account.commentAlarm,
+                account.quotationAlarm,
+                account.createdTime,
+                account.lastModifiedTime,
             );
         }
+    }
+
+    async findByNickname(nickname: string): Promise<UserEntity | null> {
+        const account = await this.prismaService.account.findUnique({
+            where: {
+                nickname: nickname,
+            },
+        });
+        if(!account) return null;
+        else return new UserEntity(
+            account.id,
+            account.password,
+            account.nickname,
+            account.identityVerificationQuestion,
+            account.identityVerificationAnswer,
+            account.profilePath,
+            account.favoriteQuotation,
+            account.favoriteAuthor,
+            account.commentAlarm,
+            account.quotationAlarm,
+            account.createdTime,
+            account.lastModifiedTime,
+        );
     }
 
     async createUser(userEntity: UserEntity): Promise<string> {
