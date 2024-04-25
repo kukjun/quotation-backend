@@ -16,7 +16,10 @@ import {
 
 @Module({
     imports: [UserModule,
-        ConfigModule.forRoot(),],
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: `.${process.env.NODE_ENV}.env`,
+        }),],
     controllers: [AppController,],
     providers: [AppService,],
 })

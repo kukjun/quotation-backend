@@ -9,7 +9,7 @@ import {
 } from "../apps/application/service/user.service";
 import {
     PrismaService, 
-} from "../prisma.service";
+} from "../apps/adaptor/out/persistence/prisma.service";
 import {
     UserAdaptor, 
 } from "../apps/adaptor/out/persistence/adaptor/user.adaptor";

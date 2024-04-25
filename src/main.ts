@@ -10,10 +10,13 @@ import {
 import {
     HttpExceptionFilter, 
 } from "./filter/http-exception.filter";
+import {
+    AppModule, 
+} from "./app.module";
 // import { AppModule } from './app.module';
 
 async function bootstrap() {
-    const app = await NestFactory.create(UserModule);
+    const app = await NestFactory.create(AppModule);
     app.useGlobalFilters(new HttpExceptionFilter());
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     await app.listen(3000);
