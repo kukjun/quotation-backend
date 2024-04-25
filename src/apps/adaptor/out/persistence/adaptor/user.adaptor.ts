@@ -2,29 +2,35 @@ import {
     UserRepository, 
 } from "../repository/user.repository";
 import {
-    User, 
-} from "../../../../domain/user";
+    UserDomain,
+} from "../../../../domain/user.domain";
 import {
     CreateUserPort, 
-} from "../../../../application/port/out/create.user.port";
+} from "../../../../application/port/out/./create-user.port";
 import {
     Injectable, 
 } from "@nestjs/common";
+import {
+    GetUserPort, 
+} from "../../../../application/port/out/get-user.port";
 
 @Injectable()
-export class UserAdaptor implements CreateUserPort {
+export class UserAdaptor implements CreateUserPort, GetUserPort {
     constructor(private userRepository: UserRepository) {}
 
-    async findUserById(id: string): Promise<User | null> {
-        const accountDto = await this.userRepository.findById(id);
-        if (!accountDto) {
-            return null;
-        } else {
-            return accountDto.toDomain();
-        }
+    async getUserById(id: string): Promise<UserDomain | null> {
+        const userEntity = await this.userRepository.findById(id);
+
+        return userEntity?.toDomain();
     }
 
-    async createUser(user: User): Promise<string | null> {
+    async getUserByNickname(nickname: string): Promise<UserDomain | null> {
+        const userEntity = await this.userRepository.findByNickname(nickname);
+
+        return userEntity?.toDomain();
+    }
+
+    async createUser(user: UserDomain): Promise<string | null> {
         const userEntity = user.toEntity();
 
         return await this.userRepository.createUser(userEntity);

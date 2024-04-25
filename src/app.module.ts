@@ -10,9 +10,13 @@ import {
 import {
     UserModule, 
 } from "./modules/user.module";
+import {
+    ConfigModule, 
+} from "@nestjs/config";
 
 @Module({
-    imports: [UserModule,],
+    imports: [UserModule,
+        ConfigModule.forRoot(),],
     controllers: [AppController,],
     providers: [AppService,],
 })

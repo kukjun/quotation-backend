@@ -18,7 +18,7 @@ import {
 } from "../apps/adaptor/out/persistence/repository/user.repository";
 import {
     CreateUserUseCaseSymbol, 
-} from "../apps/application/port/in/create.user.use.case";
+} from "../apps/application/port/in/create-user.use.case";
 
 @Global()
 @Module({
@@ -30,7 +30,7 @@ import {
         {
             provide: UserService,
             useFactory: (userAdaptor) => {
-                return new UserService(userAdaptor);
+                return new UserService(userAdaptor, userAdaptor);
             },
             inject: [UserAdaptor,],
         },
