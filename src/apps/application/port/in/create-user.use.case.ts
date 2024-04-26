@@ -14,9 +14,9 @@ export class CreateUserRequest {
 }
 
 export class CreateUserResponse {
-    constructor(readonly data: Data) {}
+    constructor(readonly data: CreateUserResponseData) {}
 }
 
-export class Data {
+export class CreateUserResponseData {
     constructor(readonly id: string) {}
 }

@@ -15,7 +15,7 @@ export class UserRepository {
     async findById(id: string): Promise<UserEntity | null> {
         const account = await this.prismaService.account.findUnique({
             where: {
-                id: id, 
+                id: id,
             },
         });
 
