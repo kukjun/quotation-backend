@@ -15,21 +15,22 @@
 import {
     UserEntity,
 } from "../adaptor/out/persistence/entities/user.entity";
+import * as bcrypt from "bcrypt";
 
 export class UserDomain {
     constructor(
-    private id: string,
-    private password: string,
-    private nickname: string,
-    private identityVerificationQuestion: string,
-    private identityVerificationAnswer: string,
-    private profilePath: string,
-    private favoriteQuotation: string,
-    private favoriteAuthor: string,
-    private commentAlarm: boolean,
-    private quotationAlarm: boolean,
-    private createdTime: Date,
-    private lastModifiedTime: Date,
+    readonly id: string,
+    readonly password: string,
+    readonly nickname: string,
+    readonly identityVerificationQuestion: string,
+    readonly identityVerificationAnswer: string,
+    readonly profilePath: string,
+    readonly favoriteQuotation: string,
+    readonly favoriteAuthor: string,
+    readonly commentAlarm: boolean,
+    readonly quotationAlarm: boolean,
+    readonly createdTime: Date,
+    readonly lastModifiedTime: Date,
 
     ) {
     }
@@ -49,6 +50,14 @@ export class UserDomain {
             this.createdTime,
             this.lastModifiedTime,
         );
+    }
+
+    async isCorrectPassword(inputPassword: string) {
+        return await bcrypt.compare(inputPassword, this.password);
+    }
+
+    isDeleted(): boolean {
+        return this.nickname.startsWith("leaved#");
     }
 
     static create(

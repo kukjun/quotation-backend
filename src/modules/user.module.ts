@@ -19,9 +19,30 @@ import {
 import {
     CreateUserUseCaseSymbol, 
 } from "../apps/application/port/in/create-user.use.case";
+import {
+    LoginUserUseCaseSymbol, 
+} from "../apps/application/port/in/login-user.use.case";
+import {
+    JwtModule, JwtService,
+} from "@nestjs/jwt";
+import {
+    ConfigModule, ConfigService, 
+} from "@nestjs/config";
 
 @Global()
 @Module({
+    imports: [
+        JwtModule.registerAsync({
+            imports: [ConfigModule,],
+            inject: [ConfigService,],
+            useFactory: () => {
+                return {
+                    signOptions: {},
+                };
+            },
+        }
+        ),
+    ],
     controllers: [UserController,],
     providers: [
         PrismaService,
@@ -29,16 +50,23 @@ import {
         UserRepository,
         {
             provide: UserService,
-            useFactory: (userAdaptor) => {
-                return new UserService(userAdaptor, userAdaptor);
+            useFactory: (userAdaptor, jwtService, configService) => {
+                return new UserService(userAdaptor, userAdaptor, jwtService, configService);
             },
-            inject: [UserAdaptor,],
+            inject: [
+                UserAdaptor,
+                JwtService,
+                ConfigService,
+            ],
         },
         {
             provide: CreateUserUseCaseSymbol,
-            useFactory: (userService) => {
-                return userService;
-            },
+            useFactory: (userService) => userService,
+            inject: [UserService,],
+        },
+        {
+            provide: LoginUserUseCaseSymbol,
+            useFactory: userService => userService,
             inject: [UserService,],
         },
     ],
