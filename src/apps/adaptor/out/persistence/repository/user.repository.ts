@@ -7,6 +7,9 @@ import {
 import {
     Injectable, 
 } from "@nestjs/common";
+import {
+    exec, 
+} from "child_process";
 
 @Injectable()
 export class UserRepository {
@@ -64,6 +67,17 @@ export class UserRepository {
 
     async createUser(userEntity: UserEntity): Promise<string> {
         const account = await this.prismaService.account.create({
+            data: userEntity,
+        });
+
+        return account.id;
+    }
+
+    async updateUser(userEntity: UserEntity): Promise<string> {
+        const account = await this.prismaService.account.update({
+            where: {
+                id: userEntity.id,
+            },
             data: userEntity,
         });
 

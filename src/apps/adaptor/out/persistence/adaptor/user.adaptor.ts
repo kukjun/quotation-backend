@@ -13,9 +13,12 @@ import {
 import {
     GetUserPort, 
 } from "../../../../application/port/out/get-user.port";
+import {
+    UpdateUserPort, 
+} from "../../../../application/port/out/update-user.port";
 
 @Injectable()
-export class UserAdaptor implements CreateUserPort, GetUserPort {
+export class UserAdaptor implements CreateUserPort, GetUserPort, UpdateUserPort {
     constructor(private userRepository: UserRepository) {}
 
     async getUserById(id: string): Promise<UserDomain | null> {
@@ -35,4 +38,11 @@ export class UserAdaptor implements CreateUserPort, GetUserPort {
 
         return await this.userRepository.createUser(userEntity);
     }
+
+    async updateUser(user: UserDomain): Promise<string> {
+        const userEntity = user.toEntity();
+
+        return await this.userRepository.updateUser(userEntity);
+    }
+
 }

@@ -26,6 +26,9 @@ import {
 import {
     JwtService,
 } from "@nestjs/jwt";
+import {
+    UpdateUserRequest, UpdateUserResponse,
+} from "../../../src/apps/application/port/in/update-user.use.case";
 
 describe("User Controller Test (e2e)", () => {
     let app;
@@ -33,7 +36,10 @@ describe("User Controller Test (e2e)", () => {
     let jwtService: JwtService;
 
     beforeAll(async () => {
+        // DB Conatiner와 연결된 prismaService 생성
         prismaService = await setupPrismaService();
+
+        // 테스트를 시작할 때, Test Container를 사용하는 PrismaService를 주입받음
         const module: TestingModule = await Test.createTestingModule({
             imports: [AppModule,],
         })
@@ -106,6 +112,45 @@ describe("User Controller Test (e2e)", () => {
             expect(accessTokenDecode.type).toEqual("accessToken");
             expect(refreshTokenDecode.id).toEqual(userEntity.id);
             expect(refreshTokenDecode.type).toEqual("refreshToken");
+        });
+    });
+
+    describe("updateUser Test", () => {
+        it("updateUser 성공", async () => {
+            // given
+            const userEntity = await getUserEntityFixture();
+            await prismaService.account.create({
+                data: userEntity,
+            });
+            const expectedNickname = "updatedNickname";
+            const expectedProfilePath = "updatedProfile";
+            const expectedFavoriteQuotation = "updatedFavoriteQuotation";
+            const expectedFavoriteAuthor = "updatedFavoriteAuthor";
+            const expectedQuotationAlarm = true;
+            const expectedCommentAlarm = true;
+            const expectedIdentityVerificationQuestion = "updatedIdentityVerificationQuestion";
+            const expectedIdentityVerificationAnswer = "updatedIdentityVerificationAnswer";
+            const requestBody = new UpdateUserRequest(
+                expectedNickname,
+                expectedIdentityVerificationQuestion,
+                expectedIdentityVerificationAnswer,
+                expectedProfilePath,
+                expectedFavoriteQuotation,
+                expectedFavoriteAuthor,
+                expectedQuotationAlarm,
+                expectedCommentAlarm,
+            );
+
+            // when
+            const response = await request(app.getHttpServer())
+                .put(`/users/${userEntity.id}`)
+                .send(requestBody);
+                // .expect(HttpStatus.OK);
+
+            // then
+            const actual = response.body as UpdateUserResponse;
+
+            expect(actual.data.id).toEqual(userEntity.id);
         });
     });
 

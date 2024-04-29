@@ -2,8 +2,8 @@ import {
     Body,
     Controller,
     HttpCode,
-    Inject,
-    Post,
+    Inject, Param,
+    Post, Put,
 } from "@nestjs/common";
 import {
     CreateUserRequest,
@@ -13,10 +13,14 @@ import {
     CreateUserResponseData,
 } from "../../../../application/port/in/create-user.use.case";
 import {
-    LoginUserRequest, LoginUserResponse, LoginUserResponseData,
+    LoginUserRequest, LoginUserResponse,
     LoginUserUseCase,
     LoginUserUseCaseSymbol,
 } from "../../../../application/port/in/login-user.use.case";
+import {
+    UpdateUserRequest, UpdateUserResponse, UpdateUserResponseData,
+    UpdateUserUseCase, UpdateUserUseCaseSymbol,
+} from "../../../../application/port/in/update-user.use.case";
 
 @Controller("/users")
 export class UserController {
@@ -25,6 +29,8 @@ export class UserController {
     private readonly createUserUseCase: CreateUserUseCase,
     @Inject(LoginUserUseCaseSymbol)
     private readonly loginUserUseCase: LoginUserUseCase,
+    @Inject(UpdateUserUseCaseSymbol)
+    private readonly updateUserUseCase: UpdateUserUseCase,
     ) {
     }
 
@@ -46,6 +52,16 @@ export class UserController {
       const response = await this.loginUserUseCase.loginUser(request);
 
       return new LoginUserResponse(response);
-      
+  }
+
+  @Put("/:id")
+  @HttpCode(200)
+  async updateUser(
+    @Param("id") id: string,
+    @Body() request: UpdateUserRequest,
+  ): Promise<UpdateUserResponse> {
+      const response = await this.updateUserUseCase.updateUser(id, request);
+
+      return new UpdateUserResponse(new UpdateUserResponseData(response));
   }
 }

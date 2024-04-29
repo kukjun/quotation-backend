@@ -1,4 +1,3 @@
-
 export const LoginUserUseCaseSymbol = Symbol("LoginUserUseCase");
 
 export interface LoginUserUseCase {
@@ -14,13 +13,14 @@ export class LoginUserRequest {
 }
 
 export class LoginUserResponse {
-    constructor(readonly data: LoginUserResponseData) {}
+    constructor(readonly data: LoginUserResponseData) {
+    }
 }
 
 export class LoginUserResponseData {
     constructor(
     readonly accessToken: string,
-    readonly refreshToken: string
+    readonly refreshToken: string,
     ) {
     }
 }

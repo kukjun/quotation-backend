@@ -28,6 +28,9 @@ import {
 import {
     ConfigModule, ConfigService, 
 } from "@nestjs/config";
+import {
+    UpdateUserUseCaseSymbol, 
+} from "../apps/application/port/in/update-user.use.case";
 
 @Global()
 @Module({
@@ -66,6 +69,11 @@ import {
         },
         {
             provide: LoginUserUseCaseSymbol,
+            useFactory: userService => userService,
+            inject: [UserService,],
+        },
+        {
+            provide: UpdateUserUseCaseSymbol,
             useFactory: userService => userService,
             inject: [UserService,],
         },
