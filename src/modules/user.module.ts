@@ -54,7 +54,7 @@ import {
         {
             provide: UserService,
             useFactory: (userAdaptor, jwtService, configService) => {
-                return new UserService(userAdaptor, userAdaptor, jwtService, configService);
+                return new UserService(userAdaptor, userAdaptor, userAdaptor, jwtService, configService);
             },
             inject: [
                 UserAdaptor,

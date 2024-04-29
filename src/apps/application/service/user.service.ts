@@ -1,44 +1,46 @@
 import {
-    UserDomain,
+    UserDomain, 
 } from "../../domain/user.domain";
 import {
-    CreateUserRequest,
-    CreateUserUseCase,
+    CreateUserRequest, CreateUserUseCase, 
 } from "../port/in/create-user.use.case";
 import {
-    CreateUserPort,
+    CreateUserPort, 
 } from "../port/out/create-user.port";
 import {
-    Inject, Injectable,
+    Inject, Injectable, 
 } from "@nestjs/common";
 import {
-    GetUserPort,
+    GetUserPort, 
 } from "../port/out/get-user.port";
 import {
     LoginFailException,
-    UserAlreadyExistException, UserNotFoundException,
+    UserAlreadyExistException,
+    UserNotFoundException,
 } from "../../../exception/error/user-exception";
 import * as bcrypt from "bcrypt";
 import {
-    LoginUserRequest, LoginUserResponseData,
-    LoginUserUseCase,
+    LoginUserRequest, LoginUserResponseData, LoginUserUseCase, 
 } from "../port/in/login-user.use.case";
 import {
-    JwtService,
+    JwtService, 
 } from "@nestjs/jwt";
 import {
-    ConfigService,
+    ConfigService, 
 } from "@nestjs/config";
 import {
-    UpdateUserRequest,
-    UpdateUserUseCase,
+    UpdateUserRequest, UpdateUserUseCase, 
 } from "../port/in/update-user.use.case";
+import {
+    UpdateUserPort, 
+} from "../port/out/update-user.port";
 
 @Injectable()
 export class UserService implements CreateUserUseCase, LoginUserUseCase, UpdateUserUseCase {
     constructor(
     @Inject("UserAdaptor") private readonly createUserPort: CreateUserPort,
     @Inject("UserAdaptor") private readonly getUserPort: GetUserPort,
+    @Inject("UserAdaptor") private readonly updateUserPort: UpdateUserPort,
     private readonly jwtService: JwtService,
     readonly configService: ConfigService,
     ) {
@@ -113,10 +115,9 @@ export class UserService implements CreateUserUseCase, LoginUserUseCase, UpdateU
         const user = await this.getUserPort.getUserById(id);
         if(!user) throw new UserNotFoundException(`id: ${id}`);
 
-        // 변경하고자 하는 정보로 User정보 변경
         const updatedUser = user.update(request);
 
-        return updatedUser.id;
+        return await this.updateUserPort.updateUser(updatedUser);
     }
 
 }
