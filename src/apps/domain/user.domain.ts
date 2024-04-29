@@ -16,6 +16,9 @@ import {
     UserEntity,
 } from "../adaptor/out/persistence/entities/user.entity";
 import * as bcrypt from "bcrypt";
+import {
+    UpdateUserRequest, 
+} from "../application/port/in/update-user.use.case";
 
 export class UserDomain {
     constructor(
@@ -58,6 +61,23 @@ export class UserDomain {
 
     isDeleted(): boolean {
         return this.nickname.startsWith("leaved#");
+    }
+
+    update(dto: UpdateUserRequest): UserDomain {
+        return new UserDomain(
+            this.id,
+            this.password,
+            dto.nickname ? dto.nickname : this.nickname,
+            dto.identityVerificationQuestion ? dto.identityVerificationQuestion : this.identityVerificationQuestion,
+            dto.identityVerificationAnswer ? dto.identityVerificationAnswer : this.identityVerificationAnswer,
+            dto.profilePath ? dto.profilePath : this.profilePath,
+            dto.favoriteQuotation ? dto.favoriteQuotation : this.favoriteQuotation,
+            dto.favoriteAuthor ? dto.favoriteAuthor : this.favoriteAuthor,
+            dto.commentAlarm ? dto.commentAlarm : this.commentAlarm,
+            dto.quotationAlarm ? dto.quotationAlarm : this.quotationAlarm,
+            this.createdTime,
+            new Date()
+        );
     }
 
     static create(

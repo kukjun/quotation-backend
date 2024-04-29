@@ -1,27 +1,26 @@
 import {
-    UserDomain,
+    UserDomain, 
 } from "../../domain/user.domain";
 import {
-    CreateUserRequest,
-    CreateUserUseCase,
+    CreateUserRequest, CreateUserUseCase, 
 } from "../port/in/create-user.use.case";
 import {
-    CreateUserPort,
+    CreateUserPort, 
 } from "../port/out/create-user.port";
 import {
-    Inject, Injectable,
+    Inject, Injectable, 
 } from "@nestjs/common";
 import {
-    GetUserPort,
+    GetUserPort, 
 } from "../port/out/get-user.port";
 import {
     LoginFailException,
     UserAlreadyExistException,
+    UserNotFoundException,
 } from "../../../exception/error/user-exception";
 import * as bcrypt from "bcrypt";
 import {
-    LoginUserRequest, LoginUserResponseData,
-    LoginUserUseCase,
+    LoginUserRequest, LoginUserResponseData, LoginUserUseCase, 
 } from "../port/in/login-user.use.case";
 import {
     JwtService, 
@@ -29,12 +28,19 @@ import {
 import {
     ConfigService, 
 } from "@nestjs/config";
+import {
+    UpdateUserRequest, UpdateUserUseCase, 
+} from "../port/in/update-user.use.case";
+import {
+    UpdateUserPort, 
+} from "../port/out/update-user.port";
 
 @Injectable()
-export class UserService implements CreateUserUseCase, LoginUserUseCase {
+export class UserService implements CreateUserUseCase, LoginUserUseCase, UpdateUserUseCase {
     constructor(
     @Inject("UserAdaptor") private readonly createUserPort: CreateUserPort,
     @Inject("UserAdaptor") private readonly getUserPort: GetUserPort,
+    @Inject("UserAdaptor") private readonly updateUserPort: UpdateUserPort,
     private readonly jwtService: JwtService,
     readonly configService: ConfigService,
     ) {
@@ -64,21 +70,21 @@ export class UserService implements CreateUserUseCase, LoginUserUseCase {
     }
 
     /**
-     * User Login API
-     * @param request
-     */
+   * User Login API
+   * @param request
+   */
     async loginUser(request: LoginUserRequest): Promise<LoginUserResponseData> {
         const user = await this.getUserPort.getUserById(request.id);
-        if(!user) throw new LoginFailException("Login Fail");
+        if (!user) throw new LoginFailException("Login Fail");
 
-        if(!await user.isCorrectPassword(request.password)) {
+        if (!await user.isCorrectPassword(request.password)) {
             throw new LoginFailException("Login Fail");
         }
 
-        if(user.isDeleted()) {
+        if (user.isDeleted()) {
             throw new LoginFailException("Login Fail");
         }
-        const payload =  {
+        const payload = {
             id: user.id,
         };
 
@@ -102,6 +108,16 @@ export class UserService implements CreateUserUseCase, LoginUserUseCase {
             accessToken,
             refreshToken,
         };
+    }
+
+    async updateUser(id: string, request: UpdateUserRequest): Promise<string> {
+        // ID로 중복된 User 있는지 파악
+        const user = await this.getUserPort.getUserById(id);
+        if(!user) throw new UserNotFoundException(`id: ${id}`);
+
+        const updatedUser = user.update(request);
+
+        return await this.updateUserPort.updateUser(updatedUser);
     }
 
 }
